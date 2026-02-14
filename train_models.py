@@ -12,7 +12,11 @@ from model.xgboost import XGBoostClassifierScratch
 # Load and preprocess training data
 print("Loading training data...")
 training_df = pd.read_csv("data/mushrooms-training-data.csv")
-training_df, _ = encode_categorical(training_df)
+training_df, mappings = encode_categorical(training_df)
+
+# Ensure models directory exists
+import os
+os.makedirs("models", exist_ok=True)
 
 X_train = training_df.drop("class", axis=1).values
 y_train = training_df["class"].values
@@ -47,5 +51,11 @@ for model_name, model in models.items():
     with open(pkl_filename, 'wb') as f:
         pickle.dump(model, f)
     print(f"  Saved to {pkl_filename}")
+    
+# Save mappings used for training so test data can be encoded consistently
+mappings_path = "models/mappings.pkl"
+with open(mappings_path, 'wb') as f:
+    pickle.dump(mappings, f)
 
 print("All models trained and saved!")
+print(f"Mappings saved to {mappings_path}")

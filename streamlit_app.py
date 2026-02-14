@@ -33,10 +33,22 @@ def load_models():
     return models
 
 
+@st.cache_resource
+def load_mappings():
+    mappings_path = "models/mappings.pkl"
+    if os.path.exists(mappings_path):
+        with open(mappings_path, 'rb') as f:
+            return pickle.load(f)
+    st.error(f"Mappings file not found: {mappings_path}")
+    st.info("Please run `python train_models.py` to train and save models first.")
+    return None
+
+
 st.title("Mushroom Classification Application")
 
 # Load pre-trained models
 models = load_models()
+mappings = load_mappings()
 
 if not models:
     st.error("No models loaded. Please run `python train_models.py` first.")
@@ -59,7 +71,11 @@ model_choice = st.selectbox("Select Model", list(models.keys()))
 
 if uploaded:
     df = pd.read_csv(uploaded)
-    df, _ = encode_categorical(df)
+    # Encode test data using mappings generated from training data
+    if mappings is not None:
+        df, _ = encode_categorical(df, mappings=mappings)
+    else:
+        df, _ = encode_categorical(df)
 
     X_test = df.drop("class", axis=1).values
     y_test = df["class"].values
