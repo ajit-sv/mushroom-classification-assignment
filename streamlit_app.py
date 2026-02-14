@@ -1,26 +1,46 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
+import pickle
+import os
 
 from model.preprocessing import encode_categorical
 from model.metrics import *
-from model.logistic_regression import LogisticRegressionScratch
-from model.decision_tree import DecisionTreeScratch
-from model.knn import KNNScratch
-from model.naive_bayes import NaiveBayesScratch
-from model.random_forest import RandomForestScratch
-from model.xgboost import XGBoostClassifierScratch
 
+
+
+# Load models from pickle files with caching
+@st.cache_resource
+def load_models():
+    models = {}
+    model_files = {
+        "Logistic Regression": "models/Logistic_Regression.pkl",
+        "Decision Tree": "models/Decision_Tree.pkl",
+        "KNN": "models/KNN.pkl",
+        "Naive Bayes": "models/Naive_Bayes.pkl",
+        "Random Forest (Ensemble)": "models/Random_Forest_Ensemble.pkl",
+        "XGBoost (Ensemble)": "models/XGBoost_Ensemble.pkl"
+    }
+    
+    for model_name, model_path in model_files.items():
+        if os.path.exists(model_path):
+            with open(model_path, 'rb') as f:
+                models[model_name] = pickle.load(f)
+        else:
+            st.error(f"Model file not found: {model_path}")
+            st.info("Please run `python train_models.py` to train and save models first.")
+    
+    return models
 
 
 st.title("Mushroom Classification Application")
 
-# Load and train models with training data
-training_df = pd.read_csv("data/mushrooms-training-data.csv")
-training_df, _ = encode_categorical(training_df)
+# Load pre-trained models
+models = load_models()
 
-X_train = training_df.drop("class", axis=1).values
-y_train = training_df["class"].values
+if not models:
+    st.error("No models loaded. Please run `python train_models.py` first.")
+    st.stop()
 
 # Download test data section
 st.sidebar.subheader("📥 Download Test Data")
@@ -35,14 +55,7 @@ st.sidebar.download_button(
 
 uploaded = st.file_uploader("Upload Test Dataset CSV", type="csv")
 
-model_choice = st.selectbox("Select Model", [
-    "Logistic Regression",
-    "Decision Tree",
-    "KNN",
-    "Naive Bayes",
-    "Random Forest (Ensemble)",
-    "XGBoost (Ensemble)"
-])
+model_choice = st.selectbox("Select Model", list(models.keys()))
 
 if uploaded:
     df = pd.read_csv(uploaded)
@@ -51,20 +64,10 @@ if uploaded:
     X_test = df.drop("class", axis=1).values
     y_test = df["class"].values
 
-    if model_choice=="Logistic Regression":
-        model = LogisticRegressionScratch()
-    elif model_choice=="Decision Tree":
-        model = DecisionTreeScratch()
-    elif model_choice=="KNN":
-        model = KNNScratch()
-    elif model_choice=="Naive Bayes":
-        model = NaiveBayesScratch()
-    elif model_choice=="Random Forest (Ensemble)":
-        model = RandomForestScratch(random_state=42)
-    else:
-        model = XGBoostClassifierScratch(random_state=25)
-
-    model.fit(X_train, y_train)
+    # Get the selected pre-trained model
+    model = models[model_choice]
+    
+    # Make predictions
     y_pred = model.predict(X_test)
 
     tp, tn, fp, fn = confusion_matrix(y_test,y_pred)
