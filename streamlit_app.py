@@ -1,16 +1,15 @@
-from model.xgboost import XGBoostClassifier
 import streamlit as st
 import pandas as pd
 import numpy as np
 
-from model.preprocessing import encode_categorical, train_test_split
+from model.preprocessing import encode_categorical
 from model.metrics import *
 from model.logistic_regression import LogisticRegressionScratch
 from model.decision_tree import DecisionTreeScratch
 from model.knn import KNNScratch
 from model.naive_bayes import NaiveBayesScratch
 from model.random_forest import RandomForestScratch
-# from model.xgboost import XGBoostScratch
+from model.xgboost import XGBoostClassifierScratch
 
 
 
@@ -63,7 +62,7 @@ if uploaded:
     elif model_choice=="Random Forest (Ensemble)":
         model = RandomForestScratch(random_state=42)
     else:
-        model = XGBoostClassifier(random_state=25)
+        model = XGBoostClassifierScratch(random_state=25)
 
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
@@ -74,7 +73,7 @@ if uploaded:
     cm_data = np.array([[tp, fp], [fn, tn]])
     cm_df = pd.DataFrame(cm_data, 
                          index=['Actual Positive', 'Actual Negative'],
-                         columns=['Predicted Positive', 'Predicted Negative'])
+                         columns=['Predicted Positive', 'Predicted Negative']).astype(str)
     st.subheader("Confusion Matrix")
     st.dataframe(cm_df)
 
@@ -84,9 +83,12 @@ if uploaded:
     f1 = f1_score(prec,rec)
     mcc_score = mcc(tp,tn,fp,fn)
 
-    st.write("Accuracy:", acc)
-    st.write("Precision:", prec)
-    st.write("Recall:", rec)
-    st.write("F1:", f1)
-    st.write("MCC:", mcc_score)
+    # Display metrics as table
+    metrics_data = {
+        "Metric": ["Accuracy", "Precision", "Recall", "F1", "MCC"],
+        "Score": [f"{acc:.4f}", f"{prec:.4f}", f"{rec:.4f}", f"{f1:.4f}", f"{mcc_score:.4f}"]
+    }
+    metrics_df = pd.DataFrame(metrics_data)
+    st.subheader("Performance Metrics")
+    st.dataframe(metrics_df, hide_index=True)
     

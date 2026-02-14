@@ -137,7 +137,7 @@ class XGBoostTree:
             return self._traverse_tree(x, node.right)
 
 
-class XGBoostClassifier:
+class XGBoostClassifierScratch:
     """XGBoost classifier built from scratch for binary classification."""
     
     def __init__(self, n_rounds=100, max_depth=5, learning_rate=0.1, 
