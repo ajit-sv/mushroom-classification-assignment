@@ -1,4 +1,4 @@
-# mushroom-classification-assignment
+# Mushroom classification assignment
 
 ## a. Problem Statement
 Mushrooms are good a source of nutrition. However, many mushrooms are inedible and poisonous; even deadly. Casual observers can easily mistake inedible mushrooms with edible ones. This mushroom classification application uses Kaggle's mushroom classification dataset to train a set of machine learning models which are then used to classify mushrooms as edible or poisonous by making predictions on user fed test data.
