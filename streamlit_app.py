@@ -136,8 +136,8 @@ if uploaded:
 
     # Display metrics as table
     metrics_data = {
-        "Metric": ["Accuracy", "Precision", "Recall", "F1", "MCC", "AOC (AUC)"],
-        "Score": [f"{acc:.4f}", f"{prec:.4f}", f"{rec:.4f}", f"{f1:.4f}", f"{mcc_score:.4f}", f"{aoc:.4f}" if aoc is not None else "N/A"]
+        "Metric": ["Accuracy", "AUC Score", "Precision", "Recall", "F1 Score", "MCC"],
+        "Score": [f"{acc:.4f}", f"{aoc:.4f}" if aoc is not None else "N/A", f"{prec:.4f}", f"{rec:.4f}", f"{f1:.4f}", f"{mcc_score:.4f}"]
     }
     metrics_df = pd.DataFrame(metrics_data)
     st.subheader("Performance Metrics")
