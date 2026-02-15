@@ -65,3 +65,18 @@ class DecisionTreeScratch:
 
     def predict(self, X):
         return np.array([self.predict_sample(x,self.tree) for x in X])
+
+    def predict_proba(self, X):
+        # For each sample, return [P(neg), P(pos)] as 0/1 (hard prediction)
+        preds = self.predict(X)
+        # Guess class labels present
+        classes = np.unique(preds)
+        # Assume binary, 0/1 or 1/0
+        proba = np.zeros((len(preds), 2))
+        for i, p in enumerate(preds):
+            if p == 0:
+                proba[i, 0] = 1.0
+            else:
+                proba[i, 1] = 1.0
+        self.last_predict_proba = proba
+        return proba

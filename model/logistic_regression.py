@@ -26,3 +26,11 @@ class LogisticRegressionScratch:
         linear = np.dot(X, self.weights) + self.bias
         probs = self.sigmoid(linear)
         return (probs > 0.5).astype(int)
+
+    def predict_proba(self, X):
+        linear = np.dot(X, self.weights) + self.bias
+        probs = self.sigmoid(linear)
+        # Store for debugging
+        self.last_predict_proba = probs
+        # Return as 2D array: [P(neg), P(pos)]
+        return np.vstack([1-probs, probs]).T

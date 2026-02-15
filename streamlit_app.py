@@ -86,6 +86,38 @@ if uploaded:
     # Make predictions
     y_pred = model.predict(X_test)
 
+    # Compute predicted probabilities for AOC if possible
+    if hasattr(model, 'predict_proba'):
+        y_pred_proba = model.predict_proba(X_test)
+        # If predict_proba returns 2D, use positive class column
+        if y_pred_proba.ndim == 2:
+            # Find positive class code from mappings
+            if mappings is not None and 'class' in mappings:
+                class_map = mappings['class']
+                # Find which code is positive (edible/poisonous): assume max code is positive
+                pos_label = max(class_map.values())
+                neg_label = min(class_map.values())
+                # st.write(f"[DEBUG] Class mapping: {class_map}, pos_label={pos_label}, neg_label={neg_label}")
+                pos_col = list(class_map.values()).index(pos_label)
+            else:
+                pos_label = 1
+                neg_label = 0
+                pos_col = 1
+            y_pred_proba_pos = y_pred_proba[:, pos_col]
+        else:
+            y_pred_proba_pos = y_pred_proba
+            pos_label = 1
+            neg_label = 0
+        # Compute AOC
+        from model.metrics import aoc_score
+        aoc = aoc_score(y_test, y_pred_proba_pos, pos_label=pos_label, debug=True)
+        # st.write(f"[DEBUG] y_pred_proba_pos[:10]: {y_pred_proba_pos[:10]}")
+        # st.write(f"[DEBUG] y_test[:10]: {y_test[:10]}")
+        # st.write(f"[DEBUG] AOC (AUC) score: {aoc:.4f}")
+    else:
+        aoc = None
+        # st.write("[DEBUG] Model does not support probability prediction. AOC not computed.")
+
     tp, tn, fp, fn = confusion_matrix(y_test,y_pred)
     
     # Display confusion matrix
@@ -104,8 +136,8 @@ if uploaded:
 
     # Display metrics as table
     metrics_data = {
-        "Metric": ["Accuracy", "Precision", "Recall", "F1", "MCC"],
-        "Score": [f"{acc:.4f}", f"{prec:.4f}", f"{rec:.4f}", f"{f1:.4f}", f"{mcc_score:.4f}"]
+        "Metric": ["Accuracy", "Precision", "Recall", "F1", "MCC", "AOC (AUC)"],
+        "Score": [f"{acc:.4f}", f"{prec:.4f}", f"{rec:.4f}", f"{f1:.4f}", f"{mcc_score:.4f}", f"{aoc:.4f}" if aoc is not None else "N/A"]
     }
     metrics_df = pd.DataFrame(metrics_data)
     st.subheader("Performance Metrics")

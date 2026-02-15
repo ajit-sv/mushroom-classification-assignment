@@ -16,3 +16,16 @@ class KNNScratch:
             k_labels = self.y_train[k_idx]
             preds.append(np.bincount(k_labels).argmax())
         return np.array(preds)
+
+    def predict_proba(self, X):
+        # For each sample, return [P(neg), P(pos)]
+        proba = []
+        for x in X:
+            distances = np.sqrt(np.sum((self.X_train - x)**2, axis=1))
+            k_idx = np.argsort(distances)[:self.k]
+            k_labels = self.y_train[k_idx]
+            counts = np.bincount(k_labels, minlength=2)
+            proba.append(counts / np.sum(counts))
+        proba = np.array(proba)
+        self.last_predict_proba = proba
+        return proba

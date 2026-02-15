@@ -22,3 +22,19 @@ class NaiveBayesScratch:
                 posteriors.append(prior+likelihood)
             preds.append(self.classes[np.argmax(posteriors)])
         return np.array(preds)
+
+    def predict_proba(self, X):
+        proba = []
+        for x in X:
+            posteriors = []
+            for cls in self.classes:
+                prior = np.log(self.priors[cls])
+                likelihood = np.sum(x*np.log(self.likelihoods[cls]))
+                posteriors.append(prior+likelihood)
+            # Softmax for probabilities
+            exp_post = np.exp(posteriors - np.max(posteriors))
+            probs = exp_post / np.sum(exp_post)
+            proba.append(probs)
+        proba = np.array(proba)
+        self.last_predict_proba = proba
+        return proba
