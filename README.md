@@ -29,7 +29,7 @@ bruises having values bruises=t, no=f
 |---------------|----------|-----------|-----------|--------|----------|-----|
 | Logistic Regression | 0.9841 | 0.9670 | 1.0000 | 0.9655 | 0.9825 | 0.9685 |
 | Decision Tree | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
-! KNN | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
+| KNN | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | Naive Bayes | 0.9524 | 0.9678 | 0.9333 | 0.9655 | 0.9492 | 0.9049 |
 | Random Forest | 1.0000 | N/A | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
 | XGBoost | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 | 1.0000 |
@@ -39,7 +39,7 @@ bruises having values bruises=t, no=f
 |---------------|-------------|
 | Logistic Regression | This model has a linear boundary and hence moderate performance. With the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situaations |
 | Decision Tree | This model provides high accuracy but risk of overfitting is present. With the test data I used, it classified all mushrooms correctly. | 
-! KNN | This model is sensitive to the value of k. I used a k value of 5. With this k value, this model managed to correctly classify all mushrooms in my test data. |
+| KNN | This model is sensitive to the value of k. I used a k value of 5. With this k value, this model managed to correctly classify all mushrooms in my test data. |
 | Naive Bayes | This model is very fast and needs very little computation needs. However, with the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situaations |
 | Random Forest | This model is highly accurate and stable. It managed to correctly classify all mushrooms in my test data. |
 | XGBoost | This model is also highly accurate. It managed to correctly classify all mushrooms in my test data. |
