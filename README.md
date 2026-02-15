@@ -4,7 +4,7 @@
 Mushrooms are good a source of nutrition. However, many mushrooms are inedible and poisonous; even deadly. Casual observers can easily mistake inedible mushrooms with edible ones. This mushroom classification application uses Kaggle's mushroom classification dataset to train a set of machine learning models which are then used to classify mushrooms as edible or poisonous by making predictions on user fed test data.
 
 ## b. Dataset description
-This application was trained on Kaggle's mushroom classification dataset (originally from UCI). The data set has 23 columns in total. Of these 22 are features and one colums has classification information. It has a total of 8124 data points. Of this, 126 data points were removed from original dataset and kept aside as test data. The rest 7998 data points were used for training the models. Some of the features are 
+This application was trained on Kaggle's mushroom classification dataset (originally from UCI). Dataset Link: https://www.kaggle.com/datasets/uciml/mushroom-classification. The data set has 23 columns in total. Of these 22 are features and one colums has classification information. It has a total of 8124 data points. Of this, 126 data points were removed from original dataset and kept aside as test data. The rest 7998 data points were used for training the models. Some of the features are 
 - cap-shape having values bell=b, conical=c, convex=x, flat=f, knobbed=k, sunken=s
 - cap-surface having values fibrous=f, grooves=g, scaly=y, smooth=s
 - cap-color having values brown=n, buff=b, cinnamon=c, gray=g, green=r, pink=p, purple=u, red=e, white=w, yellow=y
