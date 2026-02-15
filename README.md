@@ -37,10 +37,10 @@ bruises having values bruises=t, no=f
 ### Observations Table
 | ML Model Name | Observation |
 |---------------|-------------|
-| Logistic Regression | This model has a linear boundary and hence moderate performance. With the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situaations |
+| Logistic Regression | This model has a linear boundary and hence moderate performance. With the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situations |
 | Decision Tree | This model provides high accuracy but risk of overfitting is present. With the test data I used, it classified all mushrooms correctly. | 
 | KNN | This model is sensitive to the value of k. I used a k value of 5. With this k value, this model managed to correctly classify all mushrooms in my test data. |
-| Naive Bayes | This model is very fast and needs very little computation needs. However, with the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situaations |
+| Naive Bayes | This model is very fast and needs very little computation needs. However, with the test data I used, two poisonous mushroom varieties were classified as edible. This can be problematic and can't be used in real life situations |
 | Random Forest | This model is highly accurate and stable. It managed to correctly classify all mushrooms in my test data. |
 | XGBoost | This model is also highly accurate. It managed to correctly classify all mushrooms in my test data. |
 
